@@ -78,7 +78,7 @@ chmod +x deploy-from-hub.sh
 
 ```bash
 # 拉取最新镜像
-docker pull your-dockerhub-username/renqing-wanglai:latest
+docker pull zsw01442/liji:latest
 ```
 
 #### 3. 创建数据目录
@@ -100,7 +100,7 @@ docker run -d \
   -p 3000:3000 \
   -v ~/renqing-data:/app/data \
   --restart unless-stopped \
-  your-dockerhub-username/renqing-wanglai:latest
+  zsw01442/liji:latest
 
 # Windows PowerShell
 docker run -d `
@@ -108,7 +108,7 @@ docker run -d `
   -p 3000:3000 `
   -v "$env:USERPROFILE\renqing-data:/app/data" `
   --restart unless-stopped `
-  your-dockerhub-username/renqing-wanglai:latest
+  zsw01442/liji:latest
 ```
 
 #### 5. 验证部署
@@ -117,10 +117,8 @@ docker run -d `
 # 检查容器状态
 docker ps | grep renqing-wanglai
 
-# 检查健康状态
-curl http://localhost:3000/health
-
-# 应该返回: {"status":"ok"}
+# 检查应用是否运行
+curl http://localhost:3000/
 ```
 
 ### 方案二：本地构建部署
@@ -160,10 +158,8 @@ docker-compose ps
 ### 5. 验证部署
 
 ```bash
-# 检查健康状态
-curl http://localhost:3000/health
-
-# 应该返回: {"status":"ok"}
+# 检查应用是否运行
+curl http://localhost:3000/
 ```
 
 ## 🔧 配置选项

@@ -37,12 +37,6 @@ services:
       - PORT=3000
       - DATA_DIR=/app/data
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 ```
 
 #### 2. 启动服务

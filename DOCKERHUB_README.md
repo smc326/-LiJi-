@@ -60,12 +60,6 @@ services:
       - PORT=3000
       - DATA_DIR=/app/data
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
 volumes:
   liji_data:
@@ -97,12 +91,6 @@ services:
       - PORT=3000
       - DATA_DIR=/app/data
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 ```
 
 **注意**：确保宿主机目录存在且有正确权限：
@@ -168,6 +156,9 @@ docker run -d \
 5. **更新镜像**：定期拉取最新镜像以获得安全补丁
 
 ## 📋 版本更新
+
+### v1.0.11 (2026-02-15)
+- **移除健康检查**：移除了Docker健康检查指令，解决容器健康状态显示问题
 
 ### v1.0.10 (2026-02-15)
 - **修复健康检查**：将健康检查命令从 `wget` 改为 `curl`，解决容器健康状态显示问题
@@ -311,7 +302,7 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 
 ---
 
-**版本**：1.0.10  
+**版本**：1.0.11  
 **最后更新**：2026年2月15日  
 **维护者**：[你的名字]
 

@@ -32,9 +32,5 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV DATA_DIR=/app/data
 
-# 健康检查
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl --fail http://localhost:3000/health || exit 1
-
 # 启动应用
 CMD ["npm", "start"]
