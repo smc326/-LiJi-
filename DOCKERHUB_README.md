@@ -1,0 +1,318 @@
+# 礼记 (LiJi) - 人情往来管理系统
+
+🎉 一个优雅而实用的人情往来管理工具，帮助你记录和管理随礼还礼。
+
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Node](https://img.shields.io/badge/node-18%2B-brightgreen)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
+
+## ✨ 核心功能
+
+### 📝 记录管理
+- **双向记录**：支持收礼和送礼两种记录类型
+- **灵活编辑**：随时修改、删除已添加的记录
+- **智能输入**：支持姓名联想，快速填写常用联系人
+- **详细信息**：记录事由、金额、日期、地点等完整信息
+
+### 💝 礼簿管理
+- **事件管理**：为办事活动创建礼簿，记录收礼明细
+- **宾客管理**：添加和编辑参加活动的宾客信息
+- **数据同步**：礼簿编辑自动同步更新关联的收礼记录
+- **统计分析**：快速查看每场活动的收礼情况
+
+### 📊 统计分析
+- **年度统计**：按年份统计收礼和送礼的总额
+- **事由分类**：按事由类型分类统计
+- **详细报表**：查看每年的详细交易记录
+- **一键导出**：支持导出礼簿数据
+- **Excel导入导出**：支持记录列表的Excel导入和导出功能
+
+### 🔐 安全保护
+- **密码控制**：使用密码保护隐私数据
+- **首次提醒**：首次登录强制更换默认密码
+- **服务器存储**：密码存储在服务器端，确保多设备同步
+- **会话管理**：支持登出和会话控制
+
+### 🌐 多端支持
+- **响应式设计**：完美适配桌面、平板、手机
+- **跨设备同步**：所有数据在服务器端存储，随时随地访问
+- **现代化界面**：美观的渐变背景和流畅的交互体验
+
+## 🚀 快速开始
+
+### Docker 部署（推荐）
+
+#### 方式一：使用 Docker Compose（推荐）
+
+1. **创建 docker-compose.yml 文件**
+
+```yaml
+services:
+  liji:
+    image: zsw01442/liji:latest
+    container_name: liji
+    ports:
+      - "3000:3000"
+    volumes:
+      - liji_data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATA_DIR=/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  liji_data:
+```
+
+2. **启动容器**
+
+```bash
+docker-compose up -d
+```
+
+3. **访问应用**
+
+打开浏览器访问：`http://localhost:3000`
+
+#### 方式二：使用绑定挂载（持久化到指定路径）
+
+```yaml
+services:
+  liji:
+    image: zsw01442/liji:latest
+    container_name: liji
+    ports:
+      - "3000:3000"
+    volumes:
+      - /path/to/your/data:/app/data
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATA_DIR=/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+```
+
+**注意**：确保宿主机目录存在且有正确权限：
+```bash
+sudo mkdir -p /path/to/your/data
+sudo chown -R 1001:1001 /path/to/your/data
+```
+
+#### 方式三：直接运行 Docker 容器
+
+```bash
+docker run -d \
+  --name liji \
+  -p 3000:3000 \
+  -v liji_data:/app/data \
+  -e NODE_ENV=production \
+  -e PORT=3000 \
+  -e DATA_DIR=/app/data \
+  --restart unless-stopped \
+  zsw01442/liji:latest
+```
+
+## 📋 首次使用
+
+1. **访问应用**：打开浏览器输入 `http://localhost:3000`（或你的服务器地址）
+2. **默认登录**：
+   - 默认密码：`admin`
+3. **修改密码**：首次登录时系统会提示修改密码
+4. **开始使用**：修改密码后即可开始记录人情往来
+
+## 🔧 环境变量
+
+| 环境变量 | 默认值 | 说明 |
+|---------|--------|------|
+| `NODE_ENV` | `production` | 运行环境 |
+| `PORT` | `3000` | 服务端口 |
+| `DATA_DIR` | `/app/data` | 数据存储目录 |
+
+## 📁 数据持久化
+
+应用使用 JSON 文件存储数据，所有数据都保存在 `/app/data` 目录下：
+
+- `password.json` - 登录密码
+- `records.json` - 收礼/送礼记录
+- `giftbooks.json` - 礼簿信息
+- `friends.json` - 亲友录
+
+使用 Docker 卷挂载确保容器重启后数据不丢失。
+
+## 🌐 访问图标
+
+项目包含浏览器标签图标（favicon），支持以下访问方式：
+
+- `http://your-server:3000/favicon.ico` - ICO 格式图标
+- `http://your-server:3000/favicon.svg` - SVG 格式图标
+
+## 🔐 安全建议
+
+1. **修改默认密码**：首次登录必须修改默认密码 `admin`
+2. **使用 HTTPS**：生产环境建议在反向代理（如 Nginx）中配置 HTTPS
+3. **网络隔离**：建议通过防火墙限制访问，仅允许信任的网络访问
+4. **定期备份**：定期备份 `/app/data` 目录以防数据丢失
+5. **更新镜像**：定期拉取最新镜像以获得安全补丁
+
+## 📋 版本更新
+
+### v1.0.10 (2026-02-15)
+- **修复健康检查**：将健康检查命令从 `wget` 改为 `curl`，解决容器健康状态显示问题
+
+### v1.0.9 (2025-12-08)
+- **Excel导入导出**：新增记录列表的Excel导入和导出功能
+
+### v1.0.8 (2025-12-08)
+- **农历计算优化**：修复农历日期计算算法，提高准确性
+
+### v1.0.7 (2025-12-08)
+- **农历算法完善**：修复农历日期计算逻辑，确保公农历日期对应准确
+
+### v1.0.6 (2025-12-08)
+- **农历显示优化**：农历日期格式调整为"农历甲辰（龙）年四月十七"
+- **亲友录折叠**：亲友录默认只显示关系和总人数，点击展开详细名单
+
+### v1.0.5 (2025-12-08)
+- **字段顺序调整**：添加记录页面字段顺序调整为关系→金额→事由→日期
+- **关系预选项**：添加"同学"预选项
+- **默认类型**：记录类型默认为"送礼"而非"收礼"
+
+### v1.0.4 (2025-12-08)
+- **亲友录排序**：增加按姓名和金额排序功能
+- **字段顺序**：调整添加记录页面字段顺序
+- **农历日期**：添加公历日期对应的农历日期显示
+
+### v1.0.3 (2025-12-08)
+- **金额预选项**：添加100/200/500/1000金额预选项
+- **关系预选项**：添加亲戚/朋友/同事关系预选项
+- **排序箭头**：收礼明细栏添加上下箭头标识
+- **探病选项**：编辑礼簿中添加"探病"事由选项
+
+### v1.0.2 (2025-12-08)
+- **姓名联想**：添加宾客时支持姓名联想功能
+- **明细排序**：收礼明细栏支持姓名、金额、关系手动排序
+- **事由统一**：事由选项统一为固定七项
+
+### v1.0.1 (2025-12-08)
+- **默认密码修复**：修复默认密码登录问题
+- **数据持久化**：完善Docker数据持久化配置
+- **Favicon设置**：添加浏览器标签图标
+
+## 📊 系统需求
+
+- **CPU**：1 核心或以上
+- **内存**：512 MB 或以上
+- **存储**：取决于数据量，通常 100 MB 以内足够
+- **Docker**：20.10+
+- **Docker Compose**：1.29+（可选）
+
+## 🐛 常见问题
+
+### Q: 如何修改登录密码？
+A: 登录应用后，在设置菜单中可以修改密码。旧密码修改后即刻生效，其他设备需要重新登录。
+
+### Q: 数据会丢失吗？
+A: 只要正确配置了 volume 挂载，容器重启后数据不会丢失。建议定期备份 `/app/data` 目录。
+
+### Q: 可以多人同时使用吗？
+A: 可以。所有数据存储在服务器端，多台设备可以同时访问和编辑，数据会实时同步。
+
+### Q: 如何导出数据？
+A: 礼簿管理中提供导出功能，可导出为 JSON 格式。也可以直接复制 `/app/data` 目录中的 JSON 文件。
+
+### Q: 支持Excel导入导出吗？
+A: 支持！在记录列表页面，您可以点击“导出 Excel”按钮导出所有记录，也可以点击“导入 Excel”按钮从CSV文件导入记录。
+
+### Q: 支持哪些浏览器？
+A: 支持所有现代浏览器（Chrome、Firefox、Safari、Edge 等）。移动设备浏览器也完全支持。
+
+## 📱 浏览器兼容性
+
+| 浏览器 | 版本 | 支持 |
+|--------|------|------|
+| Chrome | 最新 | ✅ |
+| Firefox | 最新 | ✅ |
+| Safari | 最新 | ✅ |
+| Edge | 最新 | ✅ |
+| 移动浏览器 | 最新 | ✅ |
+
+## 🛠 开发和自定义
+
+### 本地开发
+
+```bash
+# 克隆仓库
+git clone https://github.com/yourusername/liji.git
+cd liji
+
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm start
+```
+
+访问 `http://localhost:3000`
+
+### 构建自己的镜像
+
+```bash
+docker build -t your-registry/liji:latest .
+docker push your-registry/liji:latest
+```
+
+## 📄 文件结构
+
+```
+.
+├── public/                # 前端文件
+│   ├── index.html        # 主页面
+│   ├── favicon.svg       # 网站图标
+│   └── favicon.ico       # 备用图标
+├── server.js             # Express 服务器
+├── package.json          # 项目配置
+├── Dockerfile            # Docker 构建文件
+└── docker-compose.yml    # Docker Compose 配置
+```
+
+## 🔗 相关链接
+
+- **GitHub**：[项目仓库](https://github.com/yourusername/liji)
+- **问题报告**：[Issue Tracker](https://github.com/yourusername/liji/issues)
+- **Docker Hub**：[zsw01442/liji](https://hub.docker.com/r/zsw01442/liji)
+
+## 📜 许可证
+
+MIT License - 详见 [LICENSE](LICENSE) 文件
+
+## 💬 反馈和支持
+
+如有问题或建议，欢迎：
+- 在 GitHub 提交 Issue
+- 发送邮件反馈
+- 提交 Pull Request
+
+## 🙏 致谢
+
+感谢所有贡献者的支持和反馈！
+
+---
+
+**版本**：1.0.10  
+**最后更新**：2026年2月15日  
+**维护者**：[你的名字]
+
+祝你使用愉快！💝

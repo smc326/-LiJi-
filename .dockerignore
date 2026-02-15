@@ -1,0 +1,48 @@
+# 日志文件
+*.log
+logs/
+npm-debug.log*
+
+# Node.js
+node_modules/
+.npm/
+.npmrc
+
+# Git
+.git/
+.gitignore
+
+# 测试和开发文件
+test/
+tests/
+*.test.js
+*.spec.js
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 文档文件（除了必要的）
+*.md
+!README.md
+!DEPLOYMENT.md
+
+# 部署脚本（不需要包含在镜像中）
+start.ps1
+start.sh
+deploy-from-hub.*
+push-to-dockerhub.md
+docker-hub-deploy.md
+Makefile
+
+# GitHub 工作流（不需要包含在镜像中）
+.github/
+
+# 顶层 index.html（使用 public/ 目录中的）
+index.html
