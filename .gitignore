@@ -1,3 +1,5 @@
+.github/
+.qoder/
 node_modules/
 .env
 data/
